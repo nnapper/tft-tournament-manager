@@ -48,6 +48,9 @@ export const tournamentSlice = createSlice({
       state.checkmate = action.payload == "checkmate";
       state.configLocked = true;
     },
+    lockConfig: (state) => {
+      state.configLocked = true;
+    },
     reset: (state) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       state = initialState;
@@ -62,6 +65,7 @@ export const {
   addReseed,
   setTopEightCondition,
   setWinCondition,
+  lockConfig,
   reset,
 } = tournamentSlice.actions;
 export default tournamentSlice.reducer;
