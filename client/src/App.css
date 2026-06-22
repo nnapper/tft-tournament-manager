@@ -1,0 +1,7 @@
+.flex-container {
+  display: flex; /* Enables flexbox layout */
+  gap: 10px; /* Optional: adds space between the divs */
+}
+.flex-child {
+  flex: 1; /* Makes both divs grow equally to fill the space */
+}
