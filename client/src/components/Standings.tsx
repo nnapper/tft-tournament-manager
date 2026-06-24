@@ -14,12 +14,6 @@ export const Standings = () => {
     <div>
       <button
         onClick={() => {
-          console.log(
-            "Cutoffs:",
-            cutoffs,
-            "4 in cutoffs?",
-            cutoffs.includes(4),
-          );
           dispatch(updateStandings());
         }}
       >
