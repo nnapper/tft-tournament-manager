@@ -1,7 +1,6 @@
 import axios from "axios";
 import { numToTierRankLP, tierRankLPToNum } from "./rankConversion";
 import type { Player } from "../features/playerSlice";
-import { apiKey } from "../global";
 
 interface AccountDto {
   puuid: string;
@@ -14,7 +13,9 @@ export const generatePlayer = async (riotId: string) => {
   const gameName = parts[0];
   const tagLine = parts[1];
 
-  const urlPUUID = `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${gameName}/${tagLine}?api_key=${apiKey}`;
+  const urlPUUID = `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${gameName}/${tagLine}?api_key=${import.meta.env.VITE_RIOT_API_KEY}`;
+
+  console.log("request is " + urlPUUID);
 
   const playerDTO: AccountDto = await axios({
     method: "get",
@@ -31,7 +32,7 @@ export const generatePlayer = async (riotId: string) => {
 
   const puuid = playerDTO.puuid;
 
-  const urlPlayerLP = `https://na1.api.riotgames.com/tft/league/v1/by-puuid/${puuid}?api_key=${apiKey}`;
+  const urlPlayerLP = `https://na1.api.riotgames.com/tft/league/v1/by-puuid/${puuid}?api_key=${import.meta.env.VITE_RIOT_API_KEY}`;
 
   const lp: number = await axios({
     method: "get",

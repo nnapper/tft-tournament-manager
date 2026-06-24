@@ -63,7 +63,7 @@ const tieBreaker = (playerOne: Player, playerTwo: Player) => {
 const sortPlayers = (players: Array<Player>, field: keyof Player) => {
   const len = players.length;
 
-  if (len == 1) return players;
+  if (len <= 1) return players;
 
   const firstHalf = players.slice(0, len / 2);
   const secondHalf = players.slice(len / 2);
@@ -116,22 +116,10 @@ export const sortAlphabetical = (players: Player[]) => {
   return sortPlayers(players, "riotId");
 };
 
-export const sortAlphabetical2 = (players: Player[]) => {
-  return sortPlayers(players, "riotId");
-};
-
 export const sortLP = (players: Player[]) => {
   return sortPlayers(players, "lpNormalized");
 };
 
-export const sortLP2 = (players: Player[]) => {
-  return sortPlayers(players, "lpNormalized");
-};
-
 export const sortPoints = (players: Player[]) => {
-  return sortPlayers(players, "points");
-};
-
-export const sortPoints2 = (players: Player[]) => {
   return sortPlayers(players, "points");
 };

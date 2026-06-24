@@ -1,5 +1,4 @@
 import axios from "axios";
-import { apiKey } from "../global";
 
 const tiers: Record<string, number> = {
   IRON: 0,
@@ -40,7 +39,7 @@ export const numToTierRankLP = async (num: number | null) => {
 
   if (lp < 200) return "MASTER " + lp;
 
-  const gmURL = `https://na1.api.riotgames.com/tft/league/v1/grandmaster?queue=RANKED_TFT&api_key=${apiKey}`;
+  const gmURL = `https://na1.api.riotgames.com/tft/league/v1/grandmaster?queue=RANKED_TFT&api_key=${import.meta.env.VITE_RIOT_API_KEY}`;
 
   const gmThreshold: number | null = await axios({
     method: "get",
@@ -48,7 +47,7 @@ export const numToTierRankLP = async (num: number | null) => {
     responseType: "json",
   })
     .then((response) => {
-      return response.data.entries[499].leaguePoints;
+      return response.data.entries.at(-1).leaguePoints;
     })
     .catch((err) => {
       console.log("Failed api call for some reason", err);
@@ -56,7 +55,7 @@ export const numToTierRankLP = async (num: number | null) => {
 
   if (gmThreshold == null || lp < gmThreshold) return "MASTER " + lp;
 
-  const chalURL = `https://na1.api.riotgames.com/tft/league/v1/challenger?queue=RANKED_TFT&api_key=${apiKey}`;
+  const chalURL = `https://na1.api.riotgames.com/tft/league/v1/challenger?queue=RANKED_TFT&api_key=${import.meta.env.VITE_RIOT_API_KEY}`;
 
   const chalThreshold: number | null = await axios({
     method: "get",
@@ -64,7 +63,7 @@ export const numToTierRankLP = async (num: number | null) => {
     responseType: "json",
   })
     .then((response) => {
-      return response.data.entries[499].leaguePoints;
+      return response.data.entries.at(-1).leaguePoints;
     })
     .catch((err) => {
       console.log("Failed api call for some reason", err);
