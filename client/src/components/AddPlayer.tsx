@@ -1,11 +1,28 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { updatePlayers } from "../features/playerSlice";
 import { generatePlayer } from "../util/playerGenerate";
+import { createFillPlayer } from "../util/snakeSeed";
 
 export const AddPlayer = () => {
   const [riotId, setRiotId] = useState<string>("");
   const dispatch = useDispatch();
+
+  // const [generateTestPlayers, setGenerateTestPlayers] = useState<boolean>();
+
+  const standings = useSelector((state: RootState) => state.player.standings);
+
+  // for testing
+  useEffect(() => {
+    if (standings.length == 0) {
+      for (let i = 0; i < 64; i++) {
+        const player = createFillPlayer();
+        player.riotId += i;
+        dispatch(updatePlayers(player));
+      }
+    }
+  }, []);
+
   return (
     <div>
       <input
