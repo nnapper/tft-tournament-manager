@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { sortAlphabetical, sortLP, sortPoints } from "../util/playerSort";
+import { sortLP, sortPoints } from "../util/playerSort";
 
 export interface Player {
   riotId: string;
@@ -11,13 +11,11 @@ export interface Player {
 }
 
 export interface PlayersState {
-  alphabetical: Player[];
   standings: Player[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const initialState: PlayersState = {
-  alphabetical: [],
   standings: [],
 };
 
@@ -1189,153 +1187,8 @@ const testingStatePoints: PlayersState = {
   ],
 };
 */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const testState: PlayersState = {
-  alphabetical: [
-    {
-      riotId: "LimbusPeak#PMoon",
-      puuid:
-        "XC5XLIQIr9uaAJD6tdUbRl3d1n6TQnsOE6qIESjPhLI_LsNcXdrDoaccr1LCKhNdvngXOl9xbEsAjg",
-      lp: "MASTER 284",
-      lpNormalized: 3084,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "smoll420#obn",
-      puuid:
-        "_hvxNxbrvwUpDM2ndLIASLNnCFyRk_uMtfh9D9NEWuBmR6vWndwuLaFtTLok_weVqz0SzFvkQGy-_A",
-      lp: "MASTER 39",
-      lpNormalized: 2839,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "nastro#elfie",
-      puuid:
-        "ZVpuh0AQxxd2gRTu-GPqs0QFiZiNXe3ICgob1fCD9Nf37p-FAdPJlzV2EG4nJKHfcb7tgcjSUxZozw",
-      lp: "MASTER 5",
-      lpNormalized: 2805,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Darkcat#food",
-      puuid:
-        "oWweaZByZsFtQOJ-n8p9800SJeSKS8a-_Dum_r_2Z8ytG8srRLsVM5l73s-gE49fv7pxNe0dNpIdmw",
-      lp: "DIAMOND III 65",
-      lpNormalized: 2565,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Gengar#krypt",
-      puuid:
-        "B7s7RX-U12GzzpodCrbfHRm9cHDEefx4bpfMFYAN8544f1pe6LeMXsRDDGSFVDwQ4NpNUttjr4rl5A",
-      lp: "DIAMOND IV 60",
-      lpNormalized: 2460,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Anubix#5064",
-      puuid:
-        "uVBQfbnRpkZ2Ehj_cVBLtLnlvnGtzR9Gfrrxj2Cy1EHhz_F8eyVHAVwHqhw9RkYnVmCYO2GV2bAaYA",
-      lp: "DIAMOND IV 33",
-      lpNormalized: 2433,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Protocol06#0006",
-      puuid:
-        "2LlemdlqmVe_UsejLNzUUKbdmvMiNpdI4WB78WeJRarLeHAC4EWtqDxFei1HN1lXYlNU0AxZ70Qk-A",
-      lp: "DIAMOND IV 31",
-      lpNormalized: 2431,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Dunksquad101#101",
-      puuid:
-        "Id9JaVD09wYUD5ploZv3Ef7b2OTNre0bQS72qkIQcsei2e9_Xpo1C4MbJUiypRTswf9hlMyRicGPIw",
-      lp: "EMERALD II 39",
-      lpNormalized: 2239,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "hillairie#lua",
-      puuid:
-        "Mh7trfBxu_pZqWpsEWL2uZw6tBiFusJ0B9-AeCRjgimjLUXLt46GlqA_SbmwfTRFugpCynRWjnTLEg",
-      lp: "PLATINUM IV 32",
-      lpNormalized: 1632,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Filler#1",
-      puuid:
-        "XC5XLIQIr9uaAJD6tdUbRl3d1n6TQnsOE6qIESjPhLI_LsNcXdrDoaccr1LCKhNdvngXOl9xbEsAjg",
-      lp: "MASTER 284",
-      lpNormalized: 1000,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Filler#1",
-      puuid:
-        "XC5XLIQIr9uaAJD6tdUbRl3d1n6TQnsOE6qIESjPhLI_LsNcXdrDoaccr1LCKhNdvngXOl9xbEsAjg",
-      lp: "MASTER 284",
-      lpNormalized: 1000,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Filler#2",
-      puuid:
-        "XC5XLIQIr9uaAJD6tdUbRl3d1n6TQnsOE6qIESjPhLI_LsNcXdrDoaccr1LCKhNdvngXOl9xbEsAjg",
-      lp: "MASTER 284",
-      lpNormalized: 999,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Filler#3",
-      puuid:
-        "XC5XLIQIr9uaAJD6tdUbRl3d1n6TQnsOE6qIESjPhLI_LsNcXdrDoaccr1LCKhNdvngXOl9xbEsAjg",
-      lp: "MASTER 284",
-      lpNormalized: 998,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Filler#4",
-      puuid:
-        "XC5XLIQIr9uaAJD6tdUbRl3d1n6TQnsOE6qIESjPhLI_LsNcXdrDoaccr1LCKhNdvngXOl9xbEsAjg",
-      lp: "MASTER 284",
-      lpNormalized: 997,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Filler#5",
-      puuid:
-        "XC5XLIQIr9uaAJD6tdUbRl3d1n6TQnsOE6qIESjPhLI_LsNcXdrDoaccr1LCKhNdvngXOl9xbEsAjg",
-      lp: "MASTER 284",
-      lpNormalized: 996,
-      points: 0,
-      gameHistory: [],
-    },
-    {
-      riotId: "Filler#6",
-      puuid:
-        "XC5XLIQIr9uaAJD6tdUbRl3d1n6TQnsOE6qIESjPhLI_LsNcXdrDoaccr1LCKhNdvngXOl9xbEsAjg",
-      lp: "MASTER 284",
-      lpNormalized: 995,
-      points: 0,
-      gameHistory: [],
-    },
-  ],
   standings: [
     {
       riotId: "LimbusPeak#PMoon",
@@ -1475,30 +1328,192 @@ const testState: PlayersState = {
   ],
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const testState32: PlayersState = {
+  standings: [
+    {
+      riotId: "rita#bbt",
+      puuid:
+        "aBVKXYgPN2mBpyY_mcneuWE0052N6zdGVvOmz5si81hPcDyRtmaYSPpCW1Paq-zpRJS2-MRKySKtow",
+      lp: "CHALLENGER 1665",
+      lpNormalized: 4465,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "满船清梦压星河#cyy",
+      puuid:
+        "DlG8zcs4294WOToxDFvIA6vFFbGtPgIGRl6Zb4ZlT73SDL7HBs0j7TInoAprV1K00B9ytVp4xT4ubw",
+      lp: "CHALLENGER 1608",
+      lpNormalized: 4408,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "ACAD Dishsoap#NA3",
+      puuid:
+        "tK4_ZZ3uzaPlBtvo_BIu0M-VgyOMqDX0CD9rzYH7t8YPlpkMuJvy3fkiGxkE9bZrAypYNQ-WnXlcZQ",
+      lp: "CHALLENGER 1592",
+      lpNormalized: 4392,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "CTG dankmemes01#001",
+      puuid:
+        "RGlny9qzBHB9ZEPMZLYxeFn28NZ-S0aCLtBDVhu4aRwfk-LXZf6PdM-OdZVB164eUz3XsR5R7odfSg",
+      lp: "CHALLENGER 1554",
+      lpNormalized: 4354,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "149cm#149",
+      puuid:
+        "AnFzhVKgzlop_dBmOhbkEPxdAR-hCsvFQV9JglpSle2S3FGTjbGsvaWJbTNLLsVL966Z9tGYLMWerQ",
+      lp: "CHALLENGER 1528",
+      lpNormalized: 4328,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "ArtixRx#che",
+      puuid:
+        "Nr_Hx8KEJSPmINhEvN_7XbUCrb69LbpQsvUD1uU1DPTSEBgIUqXf2EyW8Xw8uYBP0rCueZxGivZDAA",
+      lp: "CHALLENGER 1525",
+      lpNormalized: 4325,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "FNC Filup#TFT",
+      puuid:
+        "X0ZNLWE4dN1oon8fyMY85X2rsUI4gr3jcjGyPsXW92yZd6wpS9n434MSQ7kCbrYvKcjBHanl5eoSQw",
+      lp: "CHALLENGER 1523",
+      lpNormalized: 4323,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "oubo#NA1",
+      puuid:
+        "2hDZ3Mk1xCl4Kcc8KM4xVJFe2bEXVZU_il8TEGV1n9RF8XEINOGZdTeoO3cRjbY70PHvn5jAVAAfWQ",
+      lp: "CHALLENGER 1495",
+      lpNormalized: 4295,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "Kazuyoshi Morita#0822",
+      puuid:
+        "-Gn3AeYQSv8m6rQL7gdlnLKytjEYFXwifxxFKFCP5QEioqU4rIPrIvl7bk6DOsoVsByvq8yTe9_blQ",
+      lp: "CHALLENGER 1486",
+      lpNormalized: 4286,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "MeNoHaxor#NA1",
+      puuid:
+        "OHwVGUQxb7-H9e5FG_uRqqmK-YMrzDC28V12YR5h9kel7B_6hsp2uWvjFhlYNjpyJ-wKkZp2K7b7MQ",
+      lp: "CHALLENGER 1483",
+      lpNormalized: 4283,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "Broseph#LAB",
+      puuid:
+        "PUljo4_83etVtfdeLiok-ZAyIePaIHE25y47YruXHLU92dKqRttQkUQy-Rlgb4Mt19zGQaM_L65_jw",
+      lp: "CHALLENGER 1476",
+      lpNormalized: 4276,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "VCLF9#kayle",
+      puuid:
+        "wUrBLOUC0-nlnnDSqf8k5ndgs058BAe9bcYa7VCna2Hp--iYnVmsvs_0g0HBsjKIgqTFyB9s0HdAFg",
+      lp: "CHALLENGER 1471",
+      lpNormalized: 4271,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "CTG Marcel P#NA2",
+      puuid:
+        "YMoRbVoawt1MM6ziatx45koYQB3hyiuRscIqw2JI-2zqL-MOzu9B1LoHb1P2lstU61xW7Q2AFQmeLg",
+      lp: "CHALLENGER 1447",
+      lpNormalized: 4247,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "ACAD wasian#NA2",
+      puuid:
+        "lr7vNSQBeNO1bhBwZWAc8I_270gSDlh-E8bI7_xnYqJObdBgXj5UJfp5V7vV-6rgHNukohUCUDgDUQ",
+      lp: "CHALLENGER 1429",
+      lpNormalized: 4229,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "Deis1k#NA1",
+      puuid:
+        "1MbtGMhHERYbeW_UNXaHRMpxMS-PF1aFvh7kqgmklosOlLeeug4zuxsRVMmBeFQPJubkkjGhBrBUDA",
+      lp: "CHALLENGER 1424",
+      lpNormalized: 4224,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "haimahalfman#47777",
+      puuid:
+        "j6-EO29oBlii_PFGYsjK_mjRN4BQq-yNmpmgheJ2Y3g88z6m-NpUxfWaTPEqIU34ROXXcobDsCT0Zg",
+      lp: "CHALLENGER 1417",
+      lpNormalized: 4217,
+      points: 0,
+      gameHistory: [],
+    },
+    {
+      riotId: "panche3e#plink",
+      puuid:
+        "Prsy7MEPpaRUrNYw8GGD0hEXpILYMj0-g3BEYTbyVOvnd0v7NlpF1PYcudfvKwLSxtJzmwHTdxCXFQ",
+      lp: "CHALLENGER 1399",
+      lpNormalized: 4199,
+      points: 0,
+      gameHistory: [],
+    },
+  ],
+};
+
 export const playersSlice = createSlice({
   name: "player",
-  initialState: initialState,
+  initialState,
   reducers: {
     updatePlayers: (state, action) => {
       if (action.payload == null) return;
-      state.alphabetical.push(action.payload);
-      const newAlphabetical = sortAlphabetical(state.alphabetical);
-      const newStandings = sortLP(state.alphabetical);
+      state.standings.push(action.payload);
+      const newStandings = sortLP(state.standings);
 
-      state.alphabetical.splice(
-        0,
-        state.alphabetical.length,
-        ...newAlphabetical,
-      );
-      state.standings.splice(0, state.alphabetical.length, ...newStandings);
+      state.standings.splice(0, state.standings.length, ...newStandings);
     },
     updateStandings: (state) => {
       const newStandings = sortPoints(state.standings);
       console.log(newStandings);
       state.standings = newStandings;
     },
+    updatePlayer: (state, action) => {
+      if (action.payload == null) return;
+      const player = state.standings.find(
+        (player) => player.puuid === action.payload.puuid,
+      );
+      player.points = action.payload.points;
+      player.gameHistory = action.payload.gameHistory;
+    },
   },
 });
 
-export const { updatePlayers, updateStandings } = playersSlice.actions;
+export const { updatePlayers, updateStandings, updatePlayer } =
+  playersSlice.actions;
 export default playersSlice.reducer;

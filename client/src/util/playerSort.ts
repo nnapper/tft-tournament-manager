@@ -112,10 +112,6 @@ const sortPlayers = (players: Array<Player>, field: keyof Player) => {
   return sorted;
 };
 
-export const sortAlphabetical = (players: Player[]) => {
-  return sortPlayers(players, "riotId");
-};
-
 export const sortLP = (players: Player[]) => {
   return sortPlayers(players, "lpNormalized");
 };
