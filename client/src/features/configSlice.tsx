@@ -4,7 +4,6 @@ export type TopEightConditions = "lastChance" | "basic";
 export type WinConditions = "checkmate" | "points";
 
 const initialState: {
-  rounds: number;
   games: number[];
   reseed: number[];
   cutoffs: number[];
@@ -12,7 +11,6 @@ const initialState: {
   checkmate: boolean;
   configLocked: boolean;
 } = {
-  rounds: 0,
   games: [],
   reseed: [],
   cutoffs: [],
@@ -21,24 +19,34 @@ const initialState: {
   configLocked: false,
 };
 
+const testConfig = {
+  games: [3, 6, 9],
+  reseed: [2, -1, -1],
+  cutoffs: [16, 8, 1],
+  basicTopEight: true,
+  checkmate: false,
+  configLocked: true,
+};
+
 export type TournamentStateType = typeof initialState;
 
-export const tournamentSlice = createSlice({
-  name: "tournament",
-  initialState,
+export const configSlice = createSlice({
+  name: "config",
+  initialState: testConfig,
   reducers: {
-    incrementRounds: (state) => {
-      state.rounds++;
-    },
     addGames: (state, action: { payload: number }) => {
-      console.log("Game pushed");
-      state.games.push(action.payload);
+      // console.log("Game pushed");
+      state.games.push((state.games.at(-1) | 0) + action.payload);
     },
     addReseed: (state, action: { payload: number }) => {
-      state.reseed.push(action.payload);
+      state.reseed.push(
+        action.payload == -1
+          ? action.payload
+          : (state.games.at(-2) | 0) + action.payload,
+      );
     },
     addCutoffs: (state, action: { payload: number }) => {
-      console.log("Cutoff pushed type", typeof action.payload);
+      // console.log("Cutoff pushed type", typeof action.payload);
       state.cutoffs.push(action.payload);
     },
     setTopEightCondition: (state, action: { payload: TopEightConditions }) => {
@@ -51,15 +59,13 @@ export const tournamentSlice = createSlice({
     lockConfig: (state) => {
       state.configLocked = true;
     },
-    reset: (state) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      state = initialState;
+    reset: () => {
+      return initialState;
     },
   },
 });
 
 export const {
-  incrementRounds,
   addCutoffs,
   addGames,
   addReseed,
@@ -67,5 +73,5 @@ export const {
   setWinCondition,
   lockConfig,
   reset,
-} = tournamentSlice.actions;
-export default tournamentSlice.reducer;
+} = configSlice.actions;
+export default configSlice.reducer;
