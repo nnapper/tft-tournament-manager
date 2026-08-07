@@ -1,7 +1,23 @@
 .flex-container {
   display: flex; /* Enables flexbox layout */
   gap: 10px; /* Optional: adds space between the divs */
+  justify-content: center;
 }
+
 .flex-child {
   flex: 1; /* Makes both divs grow equally to fill the space */
+}
+.center-container {
+  justify-content: center;
+}
+
+.lobbies {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  row-gap: 20px;
+}
+
+.lobby {
+  flex: 0 0 25%;
 }
