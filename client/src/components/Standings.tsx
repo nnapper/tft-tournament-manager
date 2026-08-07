@@ -1,24 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
-import { updateStandings, type Player } from "../features/playerSlice";
+import { useSelector } from "react-redux";
+import { type Player } from "../features/playerSlice";
 import type { RootState } from "../main";
 
 export const Standings = () => {
   const standings = useSelector((state: RootState) => state.player.standings);
-  const cutoffs = useSelector((state: RootState) => state.tournament.cutoffs);
+  const cutoffs = useSelector((state: RootState) => state.config.cutoffs);
   const basicTopEight = useSelector(
-    (state: RootState) => state.tournament.basicTopEight,
+    (state: RootState) => state.config.basicTopEight,
   );
-  const dispatch = useDispatch();
 
   return (
     <div>
-      <button
-        onClick={() => {
-          dispatch(updateStandings());
-        }}
-      >
-        Update Standings
-      </button>
       {standings.map((player: Player, i: number) => (
         <div key={i}>
           {player.riotId}, {player.lp} - {player.points}
@@ -36,6 +28,31 @@ export const Standings = () => {
               style={{
                 color: "green",
                 backgroundColor: "green",
+                height: 1,
+              }}
+            />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export const FinalLobbyStandings = () => {
+  const standings = useSelector(
+    (state: RootState) => state.player.finalLobbyStandings,
+  );
+
+  return (
+    <div>
+      {standings.map((player: Player, i: number) => (
+        <div key={i}>
+          {player.riotId}, {player.lp} - {player.points}
+          {i == 0 && (
+            <hr
+              style={{
+                color: "red",
+                backgroundColor: "red",
                 height: 1,
               }}
             />
