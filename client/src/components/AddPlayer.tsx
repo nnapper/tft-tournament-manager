@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updatePlayers } from "../features/playerSlice";
+import { addPlayer } from "../features/playerSlice";
 import { generatePlayer } from "../util/playerGenerate";
 import { createFillPlayer } from "../util/snakeSeed";
 
@@ -18,7 +18,7 @@ export const AddPlayer = () => {
       for (let i = 0; i < 64; i++) {
         const player = createFillPlayer();
         player.riotId += i;
-        dispatch(updatePlayers(player));
+        dispatch(addPlayer(player));
       }
     }
   }, []);
@@ -36,7 +36,7 @@ export const AddPlayer = () => {
           const player = await generatePlayer(riotId);
           console.log("Generated player for", riotId);
           console.log("Generated player:", player);
-          dispatch(updatePlayers(player));
+          dispatch(addPlayer(player));
         }}
       >
         Add Player
