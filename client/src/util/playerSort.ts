@@ -60,23 +60,30 @@ const tieBreaker = (playerOne: Player, playerTwo: Player) => {
   return playerTwo;
 };
 
-const sortPlayers = (players: Array<Player>, field: keyof Player) => {
-  const len = players.length;
+const sortPlayers = (
+  players: Array<Player>,
+  field: keyof Player,
+  lowerBound: number,
+  upperBound: number,
+) => {
+  const len = upperBound - lowerBound;
 
   if (len <= 1) return players;
 
-  const firstHalf = players.slice(0, len / 2);
-  const secondHalf = players.slice(len / 2);
+  const firstHalf = players.slice(lowerBound, lowerBound + len / 2);
+  const secondHalf = players.slice(lowerBound + len / 2, upperBound);
 
-  const sortedFirstHalf = sortPlayers(firstHalf, field);
-  const sortedSecondHalf = sortPlayers(secondHalf, field);
+  const sortedFirstHalf = sortPlayers(firstHalf, field, 0, firstHalf.length);
+  const sortedSecondHalf = sortPlayers(secondHalf, field, 0, secondHalf.length);
 
   // console.log(sortedFirstHalf, sortedSecondHalf);
 
-  const sorted: Player[] = [];
+  const sorted: Player[] = players.slice(0, lowerBound);
 
-  let i: number = 0;
-  let j: number = 0;
+  console.log("0 to lower bound is", sorted);
+
+  let i = 0;
+  let j = 0;
 
   while (i < sortedFirstHalf.length && j < sortedSecondHalf.length) {
     const playerOne = sortedFirstHalf[i];
@@ -109,13 +116,22 @@ const sortPlayers = (players: Array<Player>, field: keyof Player) => {
     j++;
   }
 
-  return sorted;
+  console.log("upperbound to infty is", players.slice(upperBound));
+  return sorted.concat(players.slice(upperBound));
 };
 
-export const sortLP = (players: Player[]) => {
-  return sortPlayers(players, "lpNormalized");
+export const sortLP = (
+  players: Player[],
+  lowerBound: number,
+  upperBound: number,
+) => {
+  return sortPlayers(players, "lpNormalized", lowerBound, upperBound);
 };
 
-export const sortPoints = (players: Player[]) => {
-  return sortPlayers(players, "points");
+export const sortPoints = (
+  players: Player[],
+  lowerBound: number,
+  upperBound: number,
+) => {
+  return sortPlayers(players, "points", lowerBound, upperBound);
 };
