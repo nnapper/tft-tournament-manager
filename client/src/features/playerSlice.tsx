@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { sortLP, sortPoints } from "../util/playerSort";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { sortLP } from "../util/playerSort";
 
 export interface Player {
   riotId: string;
@@ -10,13 +10,14 @@ export interface Player {
   gameHistory: number[];
 }
 
-export interface PlayersState {
+export interface Competitors {
   standings: Player[];
+  finalLobbyStandings: Player[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const initialState: PlayersState = {
+const initialState: Competitors = {
   standings: [],
+  finalLobbyStandings: [],
 };
 
 /*
@@ -1188,7 +1189,7 @@ const testingStatePoints: PlayersState = {
 };
 */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const testState: PlayersState = {
+const testState: Competitors = {
   standings: [
     {
       riotId: "LimbusPeak#PMoon",
@@ -1329,7 +1330,7 @@ const testState: PlayersState = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const testState32: PlayersState = {
+const testState32: Competitors = {
   standings: [
     {
       riotId: "rita#bbt",
@@ -1487,33 +1488,50 @@ const testState32: PlayersState = {
   ],
 };
 
+interface UpdateStandingsPayload {
+  finalLobby: boolean;
+  newStandings: Player[];
+}
+
+interface UpdatePlayerPayload {
+  finalLobby: boolean;
+  player: Player;
+}
+
 export const playersSlice = createSlice({
   name: "player",
   initialState,
   reducers: {
-    updatePlayers: (state, action) => {
+    addPlayer: (state, action) => {
       if (action.payload == null) return;
       state.standings.push(action.payload);
-      const newStandings = sortLP(state.standings);
+      const newStandings = sortLP(state.standings, 0, state.standings.length);
 
       state.standings.splice(0, state.standings.length, ...newStandings);
     },
-    updateStandings: (state) => {
-      const newStandings = sortPoints(state.standings);
-      console.log(newStandings);
-      state.standings = newStandings;
+    updateStandings: (state, action: PayloadAction<UpdateStandingsPayload>) => {
+      if (!action.payload.finalLobby)
+        state.standings = action.payload.newStandings;
+      else state.finalLobbyStandings = action.payload.newStandings;
     },
-    updatePlayer: (state, action) => {
+    updatePlayer: (state, action: PayloadAction<UpdatePlayerPayload>) => {
       if (action.payload == null) return;
-      const player = state.standings.find(
-        (player) => player.puuid === action.payload.puuid,
-      );
-      player.points = action.payload.points;
-      player.gameHistory = action.payload.gameHistory;
+      const { puuid, gameHistory } = action.payload.player;
+      const player = !action.payload.finalLobby
+        ? state.standings.find((player) => player.puuid === puuid)
+        : state.finalLobbyStandings.find((player) => player.puuid === puuid);
+      // console.log("player is", player);
+      // console.log("finalLobby is", finalLobby);
+      // console.log("Standings are", state.standings);
+      // console.log("Final lobby is", state.finalLobbyStandings);
+      if (player == null) return;
+      // console.log("player not null");
+      player.points += gameHistory.at(-1);
+      player.gameHistory.push(gameHistory.at(-1));
     },
   },
 });
 
-export const { updatePlayers, updateStandings, updatePlayer } =
+export const { addPlayer, updateStandings, updatePlayer } =
   playersSlice.actions;
 export default playersSlice.reducer;
