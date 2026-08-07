@@ -4,14 +4,14 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import playerReducer from "./features/playerSlice.tsx";
-import gameReducer from "./features/gameSlice.tsx";
-import tournamentReducer from "./features/tournamentSlice.tsx";
+import gameReducer from "./features/gamesSlice.tsx";
+import configReducer from "./features/configSlice.tsx";
 
 const store = configureStore({
   reducer: {
     player: playerReducer,
     games: gameReducer,
-    tournament: tournamentReducer,
+    config: configReducer,
   },
 });
 
