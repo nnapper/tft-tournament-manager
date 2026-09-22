@@ -22,7 +22,7 @@ export const Lobby = ({ lobby, lobbyFinished }: LobbyProps) => {
 				<div key={lobbyPlayer.player.puuid}>
 					{lobbyPlayer.player.riotId}
 					{lobby.completed && " - "}
-					{lobby.completed && lobbyPlayer.player.gameHistory.at(-1)}
+					{lobby.completed && lobbyPlayer.placement}
 				</div>
 			))}
 			{!lobby.completed && (
