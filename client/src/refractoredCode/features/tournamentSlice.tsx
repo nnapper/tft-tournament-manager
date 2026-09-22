@@ -2,6 +2,7 @@ import { type Player } from "../../features/playerSlice";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { LobbyData } from "../components/lobby/Lobby";
 import { snakeSeed } from "../../util/snakeSeed";
+import { sortPoints } from "../../util/playerSort";
 
 export const TOP_EIGHT_CONDITIONS = {
 	lastChance: "lastChance",
@@ -47,7 +48,7 @@ const initialState: {
 	generalQual: {
 		standings: [] as Player[],
 		round: 0,
-		totalRound: -1,
+		totalRound: 6,
 		prevLobbies: [] as LobbyData[],
 		reseed: [0],
 		cutoffs: [
@@ -83,7 +84,7 @@ type InitStandingsParams = {
 	standings: Player[];
 };
 
-type IncrementRoundParam = {
+type StagesParam = {
 	stage: Stages;
 };
 
@@ -99,10 +100,6 @@ type UpdateCutoffsParams = {
 
 type UpdateConditionParams = {
 	condition: TopEightConditions | WinConditions;
-};
-
-type GenerateLobbiesParam = {
-	stage: Stages;
 };
 
 type LogGameParams = {
@@ -122,7 +119,7 @@ export const tournamentSlice = createSlice({
 				state.topEightQual.standings = standings;
 			else state.finalLobby.standings = standings;
 		},
-		incrementRound: (state, action: PayloadAction<IncrementRoundParam>) => {
+		incrementRound: (state, action: PayloadAction<StagesParam>) => {
 			const { stage } = action.payload;
 			if (stage === STAGES.generalQual) state.generalQual.round++;
 			else if (stage === STAGES.topEightQual) state.topEightQual.round++;
@@ -161,10 +158,47 @@ export const tournamentSlice = createSlice({
 				state.topEightQual.conditions = condition;
 			else state.finalLobby.conditions = condition;
 		},
-		generateLobbies: (
-			state,
-			action: PayloadAction<GenerateLobbiesParam>,
-		) => {
+		sortStandings: (state, action: PayloadAction<StagesParam>) => {
+			const { stage } = action.payload;
+			const updatedStageData =
+				stage === STAGES.generalQual
+					? state.generalQual
+					: stage === STAGES.topEightQual
+						? state.topEightQual
+						: state.finalLobby;
+
+			const { conditions, cutoffs, round, standings } = updatedStageData;
+			const standingsLowerBound =
+				conditions != undefined &&
+				conditions === TOP_EIGHT_CONDITIONS.lastChance
+					? 4
+					: 0;
+
+			const mostRecentCutoff = cutoffs
+				.filter((cutoff) => cutoff.round <= round)
+				.at(-1);
+			const standingsUpperBound =
+				stage === STAGES.finalLobby || round === 0
+					? standings.length
+					: mostRecentCutoff
+						? mostRecentCutoff.cutoff
+						: standings.length;
+
+			updatedStageData.standings = sortPoints(
+				standings,
+				standingsLowerBound,
+				standingsUpperBound,
+			);
+
+			updatedStageData.round++;
+
+			if (stage === STAGES.generalQual)
+				state.generalQual = updatedStageData;
+			else if (stage === STAGES.topEightQual)
+				state.topEightQual = updatedStageData;
+			else state.finalLobby = updatedStageData;
+		},
+		generateLobbies: (state, action: PayloadAction<StagesParam>) => {
 			const { stage } = action.payload;
 			const updatedStageData =
 				stage === STAGES.generalQual
@@ -182,22 +216,23 @@ export const tournamentSlice = createSlice({
 				standings,
 			} = updatedStageData;
 
-			if (!reseed.includes(round)) {
+			if (
+				!reseed.includes(round) &&
+				cutoffs.filter((cutoff) => cutoff.round === round).length === 0
+			)
 				updatedStageData.gameLog.push(prevLobbies);
-			} else {
+			else {
+				const mostRecentCutoff = cutoffs
+					.filter((cutoff) => cutoff.round <= round)
+					.at(-1);
 				const standingsLowerBound =
 					stage === STAGES.finalLobby || round === 0
 						? standings.length
-						: // @ts-expect-error in cases where this else statement is
-							// reached there should always be a valid cutoff
-							(cutoffs
-								.filter((cutoff) => cutoff.round <= round)
-								.at(-1).cutoff ?? standings.length);
+						: mostRecentCutoff
+							? mostRecentCutoff.cutoff
+							: standings.length;
 				const standingsUpperBound =
-					conditions != undefined &&
-					conditions === TOP_EIGHT_CONDITIONS.lastChance
-						? 4
-						: 0;
+					conditions === TOP_EIGHT_CONDITIONS.lastChance ? 4 : 0;
 
 				const eligiblePlayers = standings.slice(
 					standingsUpperBound,
@@ -209,8 +244,13 @@ export const tournamentSlice = createSlice({
 						completed: false,
 					};
 				});
+
 				updatedStageData.gameLog.push(newLobbies);
 				updatedStageData.prevLobbies = newLobbies;
+
+				console.log("Created lobbies", [
+					...updatedStageData.gameLog[round],
+				]);
 			}
 
 			if (stage === STAGES.generalQual)
@@ -230,18 +270,23 @@ export const tournamentSlice = createSlice({
 
 			const { round } = updatedStageData;
 
+			console.log("Lobby result is", { ...lobbyResult });
+
 			const index = updatedStageData.gameLog[round].findIndex(
 				(lobby) =>
 					lobby.players[0].player.puuid ===
 					lobbyResult.players[0].player.puuid,
 			);
-			updatedStageData.gameLog[round].with(index, lobbyResult);
+			updatedStageData.gameLog[round][index] = lobbyResult;
 
-			const updatedStandings = [...updatedStageData.standings];
+			lobbyResult.players.sort(
+				(playerOne, playerTwo) =>
+					playerTwo.placement - playerOne.placement,
+			);
 			lobbyResult.players.map((playerLobby) => {
 				const { puuid } = playerLobby.player;
 
-				const player = updatedStandings.find(
+				const player = updatedStageData.standings.find(
 					(playerStanding) => playerStanding.puuid === puuid,
 				);
 				if (player == null) return;
@@ -250,7 +295,6 @@ export const tournamentSlice = createSlice({
 				player.points += pointsScored;
 				player.gameHistory.push(pointsScored);
 			});
-			updatedStageData.standings = updatedStandings;
 
 			if (stage === STAGES.generalQual)
 				state.generalQual = updatedStageData;
@@ -261,6 +305,6 @@ export const tournamentSlice = createSlice({
 	},
 });
 
-export const { initStandings, generateLobbies, logGame } =
+export const { initStandings, sortStandings, generateLobbies, logGame } =
 	tournamentSlice.actions;
 export default tournamentSlice.reducer;
