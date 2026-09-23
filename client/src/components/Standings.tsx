@@ -1,64 +1,51 @@
-import { useSelector } from "react-redux";
 import { type Player } from "../features/playerSlice";
-import type { RootState } from "../main";
+import {
+	TOP_EIGHT_CONDITIONS,
+	type CutoffData,
+	type TopEightConditions,
+	type WinConditions,
+} from "../features/tournament/tournamentSlice";
 
-export const Standings = () => {
-  const standings = useSelector((state: RootState) => state.player.standings);
-  const cutoffs = useSelector((state: RootState) => state.config.cutoffs);
-  const basicTopEight = useSelector(
-    (state: RootState) => state.config.basicTopEight,
-  );
-
-  return (
-    <div>
-      {standings.map((player: Player, i: number) => (
-        <div key={i}>
-          {player.riotId}, {player.lp} - {player.points}
-          {cutoffs.includes(i + 1) && (
-            <hr
-              style={{
-                color: "red",
-                backgroundColor: "red",
-                height: 1,
-              }}
-            />
-          )}
-          {!basicTopEight && i == 3 && (
-            <hr
-              style={{
-                color: "green",
-                backgroundColor: "green",
-                height: 1,
-              }}
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  );
+type StandingsProp = {
+	standings: Player[];
+	cutoffs: CutoffData[];
+	condition?: TopEightConditions | WinConditions;
 };
 
-export const FinalLobbyStandings = () => {
-  const standings = useSelector(
-    (state: RootState) => state.player.finalLobbyStandings,
-  );
+export const Standings = (props: StandingsProp) => {
+	const { standings, cutoffs, condition } = props;
 
-  return (
-    <div>
-      {standings.map((player: Player, i: number) => (
-        <div key={i}>
-          {player.riotId}, {player.lp} - {player.points}
-          {i == 0 && (
-            <hr
-              style={{
-                color: "red",
-                backgroundColor: "red",
-                height: 1,
-              }}
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  );
+	const playerCutoffs = [] as number[];
+	cutoffs.map((cutoff) => playerCutoffs.push(cutoff.cutoff));
+
+	return (
+		<div>
+			{standings.map((player, i) => (
+				<div key={player.puuid}>
+					{player.riotId}, {player.lp} - {player.points}
+					{playerCutoffs.includes(i + 1) && (
+						<hr
+							key={`cutoff${i + 1}`}
+							style={{
+								color: "red",
+								backgroundColor: "red",
+								height: 1,
+							}}
+						/>
+					)}
+					{condition === TOP_EIGHT_CONDITIONS.lastChance &&
+						i == 3 && (
+							<hr
+								key={"guarenteeQual"}
+								style={{
+									color: "green",
+									backgroundColor: "green",
+									height: 1,
+								}}
+							/>
+						)}
+				</div>
+			))}
+		</div>
+	);
 };
