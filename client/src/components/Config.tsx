@@ -10,9 +10,29 @@ import {
 	type WinConditions,
 	TOP_EIGHT_CONDITIONS,
 	WIN_CONDITIONS,
+	type CutoffData,
 } from "../features/tournament/tournamentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store";
+
+type CutoffsDisplayProps = {
+	cutoffs: CutoffData[];
+};
+
+const CutoffsDisplay = (props: CutoffsDisplayProps) => {
+	const { cutoffs } = props;
+	return (
+		<div>
+			Cutoffs
+			{cutoffs.map((cutoffData) => (
+				<div>
+					After round {cutoffData.round} top {cutoffData.cutoff}{" "}
+					remain
+				</div>
+			))}
+		</div>
+	);
+};
 
 type ConfigProps = {
 	stage: Stages;
@@ -46,6 +66,8 @@ export const Config = (props: ConfigProps) => {
 	};
 	const updateCutoffs = (cutoffStringInput: string) => {
 		const cutoffValues = cutoffStringInput.split(",");
+		if (cutoffValues.length != 2) return;
+
 		const cutoff = { round: +cutoffValues[0], cutoff: +cutoffValues[1] };
 		dispatch(addCutoff({ stage, cutoff }));
 	};
@@ -105,11 +127,9 @@ export const Config = (props: ConfigProps) => {
 				</button>
 			)}
 
-			{/* <div>{JSON.stringify(stageData)}</div> */}
-
 			<div>Total Rounds: {totalRounds}</div>
 			<div>Reseed lobbies: {reseed}</div>
-			<div>Cutoffs: {JSON.stringify(cutoffs)}</div>
+			<CutoffsDisplay cutoffs={cutoffs} />
 			{conditions && <div>Conditions: {conditions}</div>}
 		</div>
 	);
